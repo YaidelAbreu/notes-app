@@ -25,6 +25,6 @@ async def create_user(db: AsyncSession, user: UserCreate):
 
 async def authenticate_user(db: AsyncSession, email: str, password: str):
     user = await get_user_by_email(db, email)
-    if not user or not verify_password(password, hash_password(password)):
+    if not user or not verify_password(password, user.password):
         return None
     return user

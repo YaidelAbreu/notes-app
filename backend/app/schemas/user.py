@@ -13,3 +13,8 @@ class UserCreate(UserBase):
 class UserResponse(BaseModel):
     email: str
     full_name: str
+
+
+class UserCredentials(BaseModel):
+    email: str
+    password: str
