@@ -7,6 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.database import Base
 from app.utils.date import utcnow
 
+
 class Note(Base):
     __tablename__ = "notes"
     id: Mapped[uuid.UUID] = mapped_column(

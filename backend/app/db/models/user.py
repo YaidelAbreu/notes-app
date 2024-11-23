@@ -1,12 +1,13 @@
 from __future__ import annotations
 import uuid
 from datetime import datetime
-from sqlalchemy import select, ForeignKey, Text
+from sqlalchemy import select
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.database import Base
 from app.utils.date import utcnow
 from app.core.security import verify_password
+
 
 class User(Base):
     __tablename__ = "users"
@@ -22,7 +23,7 @@ class User(Base):
         server_default=utcnow(), server_onupdate=utcnow(), onupdate=utcnow()
     )
 
-    notes: Mapped[list[Note]] = relationship("Note", back_populates="author")
+    notes: Mapped[list["Note"]] = relationship("Note", back_populates="author", lazy="joined")
 
     @classmethod
     async def find_by_email(cls, db: AsyncSession, email: str):
