@@ -12,7 +12,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import DeclarativeBase
 
 # Database URL with port included for connection to the PostgreSQL database
-DATABASE_URL = "postgresql+asyncpg://user:password@localhost:5432/notes"
+DATABASE_URL = "postgresql+asyncpg://user:password@localhost:5432/app-notes"
 
 # Create an asynchronous engine with the provided DATABASE_URL
 engine = create_async_engine(DATABASE_URL, echo=True)  # The 'echo=True' will log SQL queries
