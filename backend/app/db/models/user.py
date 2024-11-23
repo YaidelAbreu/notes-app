@@ -6,7 +6,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.database import Base
 from app.utils.date import utcnow
-from app.core.hash import verify_password
+from app.core.security import verify_password
 
 class User(Base):
     __tablename__ = "users"
