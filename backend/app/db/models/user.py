@@ -23,11 +23,18 @@ class User(Base):
         server_default=utcnow(), server_onupdate=utcnow(), onupdate=utcnow()
     )
 
-    notes: Mapped[list["Note"]] = relationship("Note", back_populates="author", lazy="joined")
+    notes: Mapped[list["Note"]] = relationship("Note", back_populates="author",
+                                               lazy="joined")
 
     @classmethod
     async def find_by_email(cls, db: AsyncSession, email: str):
         query = select(cls).where(cls.email == email)
+        result = await db.execute(query)
+        return result.scalars().first()
+
+    @classmethod
+    async def find_by_id(cls, db: AsyncSession, id: str):
+        query = select(cls).where(cls.id == id)
         result = await db.execute(query)
         return result.scalars().first()
 
