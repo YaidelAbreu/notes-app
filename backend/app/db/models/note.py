@@ -14,8 +14,8 @@ class Note(Base):
         primary_key=True, index=True, default=uuid.uuid4
     )
     created_at: Mapped[datetime] = mapped_column(server_default=utcnow())
-    title: Mapped[str]
-    content: Mapped[str] = mapped_column(Text)
+    title: Mapped[str] = mapped_column(nullable=False)
+    content: Mapped[str] = mapped_column(Text, nullable=False)
 
     author_id: Mapped[uuid.UUID] = mapped_column(
         ForeignKey("users.id", ondelete="CASCADE")
