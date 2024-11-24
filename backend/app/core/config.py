@@ -2,7 +2,8 @@ import os
 
 SECRET_KEY = os.getenv(
     "SECRET_KEY",
-    "sraGbRmjYQXmYdnrgPk!OFE35UP6n/QqeoED=iu/bUXBFSSPwnsuprP6T45Qsbwywu2khUka!6IIleY",
+    "sraGbRmjYQXmYdnrgPk!OFE35UP6n/QqeoED=iu/bUXBFSSPwnsuprP6T45Qsbwyw"
+    "u2khUka!6IIleY",
 )
 if not SECRET_KEY:
     SECRET_KEY = os.urandom(32)

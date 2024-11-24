@@ -2,7 +2,7 @@ from __future__ import annotations
 import uuid
 from datetime import datetime
 from sqlalchemy import select
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.database import Base
 from app.utils.date import utcnow
@@ -22,9 +22,6 @@ class User(Base):
     updated_at: Mapped[datetime] = mapped_column(
         server_default=utcnow(), server_onupdate=utcnow(), onupdate=utcnow()
     )
-
-    notes: Mapped[list["Note"]] = relationship("Note", back_populates="author",
-                                               lazy="joined")
 
     @classmethod
     async def find_by_email(cls, db: AsyncSession, email: str):

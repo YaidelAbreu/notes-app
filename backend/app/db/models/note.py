@@ -1,9 +1,8 @@
 from __future__ import annotations
 import uuid
 from datetime import datetime
-from sqlalchemy import select, ForeignKey, Text
-from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import ForeignKey, Text
+from sqlalchemy.orm import Mapped, mapped_column
 from app.db.database import Base
 from app.utils.date import utcnow
 
@@ -21,10 +20,3 @@ class Note(Base):
         ForeignKey("users.id", ondelete="CASCADE")
     )
     updated_on: Mapped[datetime] = mapped_column(server_default=utcnow())
-    author: Mapped["User"] = relationship("User", back_populates="notes")
-
-    @classmethod
-    async def find_by_author(cls, db: AsyncSession, author: User):
-        query = select(cls).where(cls.author_id == author.id)
-        result = await db.execute(query)
-        return result.scalars().all()
