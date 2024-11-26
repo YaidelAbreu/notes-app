@@ -7,6 +7,7 @@ from sqlalchemy.ext.asyncio import (
 )
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy import select
 
 # Database URL with port included for connection to the PostgreSQL database
 DATABASE_URL = "postgresql+asyncpg://user:password@localhost:5432/app-notes"
@@ -39,3 +40,9 @@ class Base(AsyncAttrs, DeclarativeBase):
                 status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
                 detail=repr(ex)
             ) from ex
+
+    @classmethod
+    async def find_by_id(cls, db: AsyncSession, id: str):
+        query = select(cls).where(cls.id == id)
+        result = await db.execute(query)
+        return result.scalars().first()

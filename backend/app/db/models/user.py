@@ -30,12 +30,6 @@ class User(Base):
         return result.scalars().first()
 
     @classmethod
-    async def find_by_id(cls, db: AsyncSession, id: str):
-        query = select(cls).where(cls.id == id)
-        result = await db.execute(query)
-        return result.scalars().first()
-
-    @classmethod
     async def authenticate(cls, db: AsyncSession, email: str, password: str):
         user = await cls.find_by_email(db=db, email=email)
         if not user or not verify_password(password, user.password):
