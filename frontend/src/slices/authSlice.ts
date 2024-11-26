@@ -55,6 +55,15 @@ export const register = createAsyncThunk("register", async (data: NewUser) => {
   return resData;
 });
 
+export const logout = createAsyncThunk("logout", async () => {
+  const response = await axiosInstance.post("/logout", {});
+  const resData = response.data;
+
+  localStorage.removeItem("userInfo");
+
+  return resData;
+});
+
 const authSlice = createSlice({
   name: "auth",
   initialState: "",
