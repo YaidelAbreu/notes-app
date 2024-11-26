@@ -11,14 +11,33 @@ import {
 import { LockOutlined } from "@mui/icons-material";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import React from "react";
+import { useAppDispatch } from "../hooks/redux-hooks";
+import { register } from "../slices/authSlice";
 
 const Register = () => {
+  const dispatch = useAppDispatch();
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleRegister = async () => {};
+  const handleRegister = async () => {
+    if (name && email && password) {
+      try {
+        await dispatch(
+          register({
+            name,
+            email,
+            password
+          })
+        ).unwrap();
+      } catch (e) {
+        console.error(e);
+      }
+    } else {
+      // Show an error message.
+    }
+  };
 
   return (
     <>
