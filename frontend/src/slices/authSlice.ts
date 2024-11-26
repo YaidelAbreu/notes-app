@@ -46,6 +46,15 @@ export const login = createAsyncThunk("login", async (data: User) => {
   return resData;
 });
 
+export const register = createAsyncThunk("register", async (data: NewUser) => {
+  const response = await axiosInstance.post("/register", data);
+  const resData = response.data;
+
+  localStorage.setItem("userInfo", JSON.stringify(resData));
+
+  return resData;
+});
+
 const authSlice = createSlice({
   name: "auth",
   initialState: "",
