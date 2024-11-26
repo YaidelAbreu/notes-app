@@ -29,8 +29,6 @@ const Home = () => {
   return (
     <>
       <h1>Home</h1>
-      <h4>Name: {userProfileInfo?.name}</h4>
-      <h4>Email: {userProfileInfo?.email}</h4>
       <Button variant="contained" sx={{ mt: 3, mb: 2 }} onClick={handleLogout}>
         Logout
       </Button>

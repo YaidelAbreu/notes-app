@@ -7,17 +7,17 @@ type User = {
 };
 
 type NewUser = User & {
-  name: string;
+  full_name: string;
 };
 
 type UserBasicInfo = {
   id: string;
-  name: string;
+  full_name: string;
   email: string;
 };
 
 type UserProfileData = {
-  name: string;
+  full_name: string;
   email: string;
 };
 
@@ -38,7 +38,7 @@ const initialState: AuthApiState = {
 };
 
 export const login = createAsyncThunk("login", async (data: User) => {
-  const response = await axiosInstance.post("/login", data);
+  const response = await axiosInstance.post("/auth/login", data);
   const resData = response.data;
 
   localStorage.setItem("userInfo", JSON.stringify(resData));
@@ -47,7 +47,7 @@ export const login = createAsyncThunk("login", async (data: User) => {
 });
 
 export const register = createAsyncThunk("register", async (data: NewUser) => {
-  const response = await axiosInstance.post("/register", data);
+  const response = await axiosInstance.post("/auth/register", data);
   const resData = response.data;
 
   localStorage.setItem("userInfo", JSON.stringify(resData));

@@ -17,16 +17,16 @@ import { register } from "../slices/authSlice";
 const Register = () => {
   const dispatch = useAppDispatch();
 
-  const [name, setName] = useState("");
+  const [full_name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleRegister = async () => {
-    if (name && email && password) {
+    if (full_name && email && password) {
       try {
         await dispatch(
           register({
-            name,
+            full_name,
             email,
             password
           })
@@ -59,13 +59,13 @@ const Register = () => {
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
-                  name="name"
+                  name="full_name"
                   required
                   fullWidth
-                  id="name"
+                  id="full_name"
                   label="Name"
                   autoFocus
-                  value={name}
+                  value={full_name}
                   onChange={(e) => setName(e.target.value)}
                 />
               </Grid>
