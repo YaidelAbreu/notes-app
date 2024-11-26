@@ -9,15 +9,32 @@ import {
   Button,
   Grid
 } from "@mui/material";
-import React from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useAppDispatch } from "../hooks/redux-hooks";
+import { login } from "../slices/authSlice";
 
 const Login = () => {
+  const dispatch = useAppDispatch();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = () => {};
+  const handleLogin = async () => {
+    if (email && password) {
+      try {
+        await dispatch(
+          login({
+            email,
+            password
+          })
+        ).unwrap();
+      } catch (e) {
+        console.error(e);
+      }
+    } else {
+    }
+  };
 
   return (
     <>
