@@ -12,6 +12,9 @@ class Note(Base):
     id: Mapped[uuid.UUID] = mapped_column(
         primary_key=True, index=True, default=uuid.uuid4
     )
+    version: Mapped[int] = mapped_column(
+        primary_key=True, default=1
+    )
     created_at: Mapped[datetime] = mapped_column(server_default=utcnow())
     title: Mapped[str] = mapped_column(nullable=False)
     content: Mapped[str] = mapped_column(Text, nullable=False)
@@ -20,3 +23,5 @@ class Note(Base):
         ForeignKey("users.id", ondelete="CASCADE")
     )
     updated_on: Mapped[datetime] = mapped_column(server_default=utcnow())
+    date_replaced: Mapped[datetime] = mapped_column(nullable=True)
+    is_active: Mapped[bool] = mapped_column(default=True)

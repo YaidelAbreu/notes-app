@@ -10,7 +10,7 @@ from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy import select
 
 # Database URL with port included for connection to the PostgreSQL database
-DATABASE_URL = "postgresql+asyncpg://user:password@localhost:5432/app-notes"
+DATABASE_URL = "postgresql+asyncpg://user:password@localhost:5432/app-notes3"
 
 # Create an asynchronous engine with the provided DATABASE_URL
 engine = create_async_engine(DATABASE_URL, echo=True)
