@@ -1,3 +1,4 @@
+from sqlalchemy import and_
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from app.db.models.note import Note
@@ -8,7 +9,15 @@ from fastapi import HTTPException, status
 
 
 async def get_notes_for_user(db: AsyncSession, user: User):
-    result = await db.execute(select(Note).filter(Note.author_id == user.id))
+    result = await db.execute(
+        select(Note).where(
+            and_(
+                Note.author_id == user.id,
+                Note.is_active,
+                Note.date_replaced.is_(None)
+            )
+        )
+    )
     notes = result.scalars().all()
     return notes
 
