@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axiosInstance from "../api/axiosInstance";
 
 type User = {
@@ -64,10 +64,78 @@ export const logout = createAsyncThunk("logout", async () => {
   return resData;
 });
 
+export const getUser = createAsyncThunk(
+  "users/profile",
+  async (userId: string) => {
+    const response = await axiosInstance.get(`/users/${userId}`);
+    return response.data;
+  }
+);
+
 const authSlice = createSlice({
   name: "auth",
-  initialState: "",
-  reducers: {}
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(login.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(
+        login.fulfilled,
+        (state, action: PayloadAction<UserBasicInfo>) => {
+          state.status = "idle";
+          state.basicUserInfo = action.payload;
+        }
+      )
+      .addCase(login.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message || "Login failed";
+      })
+
+      .addCase(register.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(
+        register.fulfilled,
+        (state, action: PayloadAction<UserBasicInfo>) => {
+          state.status = "idle";
+          state.basicUserInfo = action.payload;
+        }
+      )
+      .addCase(register.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message || "Registration failed";
+      })
+
+      .addCase(logout.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(logout.fulfilled, (state, action) => {
+        state.status = "idle";
+        state.basicUserInfo = null;
+      })
+      .addCase(logout.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message || "Logout failed";
+      })
+
+      .addCase(getUser.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(getUser.fulfilled, (state, action) => {
+        state.status = "idle";
+        state.userProfileData = action.payload;
+      })
+      .addCase(getUser.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message || "Get user profile data failed";
+      });
+  }
 });
 
 export default authSlice.reducer;
