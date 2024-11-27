@@ -1,5 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axiosInstance from "../api/axiosInstance";
+import { showNotification, NotificationType } from "./notificationSlice";
+import { AxiosError } from "axios";
 
 type User = {
   email: string;
@@ -21,6 +23,10 @@ type UserProfileData = {
   email: string;
 };
 
+type ErrorResponse = {
+  message: string;
+};
+
 type AuthApiState = {
   basicUserInfo?: UserBasicInfo | null;
   userProfileData?: UserProfileData | null;
@@ -37,14 +43,44 @@ const initialState: AuthApiState = {
   error: null
 };
 
-export const login = createAsyncThunk("login", async (data: User) => {
-  const response = await axiosInstance.post("/auth/login", data);
-  const resData = response.data;
+export const login = createAsyncThunk(
+  "login",
+  async (data: User, { rejectWithValue, dispatch }) => {
+    try {
+      const response = await axiosInstance.post("/login", data);
+      const resData = response.data;
 
-  localStorage.setItem("userInfo", JSON.stringify(resData));
+      localStorage.setItem("userInfo", JSON.stringify(resData));
+      dispatch(
+        showNotification({
+          message: resData.message || "Success",
+          type: NotificationType.Success
+        })
+      );
 
-  return resData;
-});
+      return resData;
+    } catch (error) {
+      if (error instanceof AxiosError && error.response) {
+        const errorResponse = error.response.data;
+        dispatch(
+          showNotification({
+            message: errorResponse.message,
+            type: NotificationType.Error
+          })
+        );
+        return rejectWithValue(errorResponse);
+      }
+      dispatch(
+        showNotification({
+          message: "An error occurred",
+          type: NotificationType.Error
+        })
+      );
+
+      throw error;
+    }
+  }
+);
 
 export const register = createAsyncThunk("register", async (data: NewUser) => {
   const response = await axiosInstance.post("/auth/register", data);
@@ -105,6 +141,17 @@ const authSlice = createSlice({
           state.basicUserInfo = action.payload;
         }
       )
+
+      .addCase(login.rejected, (state, action) => {
+        state.status = "failed";
+        if (action.payload) {
+          state.error =
+            (action.payload as ErrorResponse).message || "Login failed";
+        } else {
+          state.error = action.error.message || "Login failed";
+        }
+      })
+
       .addCase(register.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message || "Registration failed";
