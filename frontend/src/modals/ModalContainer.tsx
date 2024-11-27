@@ -1,6 +1,8 @@
 import AddNotePopup from "../components/note/AddNotePopup";
-import UpdateNotePopup from "../components/note/UpdateProjectPopup";
+import UpdateNotePopup from "../components/note/UpdateNotePopup";
+import DeleteNotePopup from "../components/note/DeleteNotePopup";
 import { useAppSelector } from "../hooks/redux-hooks";
+
 // Import other modal components
 
 const ModalContainer = () => {
@@ -13,6 +15,8 @@ const ModalContainer = () => {
         return <AddNotePopup />;
       case "updateNote":
         return <UpdateNotePopup id={modalProps?.id} />;
+      case "deleteNote":
+        return <DeleteNotePopup id={modalProps?.id} />;
       // Add other cases for different modals
       default:
         return null;

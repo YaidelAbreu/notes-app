@@ -5,7 +5,7 @@ import CancelButton from "../forms/CancelButton";
 import { closeModal } from "../../slices/modalSlice";
 import { useAppDispatch } from "../../hooks/redux-hooks";
 
-interface TaskPopupProps {
+interface NotesPopupProps {
   title: string;
   onSubmit: () => void;
   classNames?: string;
@@ -17,7 +17,7 @@ const FormModal = ({
   onSubmit,
   classNames,
   children
-}: TaskPopupProps) => {
+}: NotesPopupProps) => {
   const dispatch = useAppDispatch();
 
   const handleSubmit = () => {

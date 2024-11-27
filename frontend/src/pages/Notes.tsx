@@ -17,7 +17,7 @@ export default function Notes() {
   };
 
   const handleOpenDeleteNotePopup = (id: string) => {
-    dispatch(openModal({ modalName: "updateNote", modalProps: { id: id } }));
+    dispatch(openModal({ modalName: "deleteNote", modalProps: { id: id } }));
   };
 
   return (
