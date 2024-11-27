@@ -24,4 +24,4 @@ class NoteUpdate(BaseModel):
 class NoteUpdateResponse(BaseModel):
     success: bool
     message: str
-    note: Optional[Any] = None
+    note: NoteResponse

@@ -73,16 +73,21 @@ async def update_note(
     if note.version != note_data.version:
         return {
             "success": False,
-            "message": "The note has been modified by another process",
-            "current_note": note,
+            "message": (
+                "The note has been modified by another "
+                "process at the same time. "
+                "Please try again."
+            ),
+            "note": note,
         }
 
-    await next_version(db, note, note_data)
+    new_version = await next_version(db, note, note_data)
 
-    return NoteUpdateResponse(
-        success=True,
-        message="Note updated successfully",
-    )
+    return {
+        "success": True,
+        "message": "Note updated successfully",
+        "note": new_version
+    }
 
 
 async def next_version(db: AsyncSession,
