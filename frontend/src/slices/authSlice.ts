@@ -46,10 +46,12 @@ export const login = createAsyncThunk(
   "login",
   async (data: User, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.post("/login", data);
+      const response = await axiosInstance.post("/auth/login", data);
       const resData = response.data;
+      const token = response.data.access_token?.access?.token;
 
       localStorage.setItem("userInfo", JSON.stringify(resData));
+      localStorage.setItem("BearerToken", token);
 
       return resData;
     } catch (error) {
@@ -68,7 +70,7 @@ export const register = createAsyncThunk(
   "register",
   async (data: NewUser, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.post("/register", data);
+      const response = await axiosInstance.post("/auth/register", data);
       const resData = response.data;
 
       localStorage.setItem("userInfo", JSON.stringify(resData));
@@ -90,30 +92,13 @@ export const logout = createAsyncThunk(
   "logout",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.post("/logout", {});
+      const response = await axiosInstance.post("/auth/logout", {});
       const resData = response.data;
 
       localStorage.removeItem("userInfo");
+      localStorage.removeItem("BearerToken");
 
       return resData;
-    } catch (error) {
-      if (error instanceof AxiosError && error.response) {
-        const errorResponse = error.response.data;
-
-        return rejectWithValue(errorResponse);
-      }
-
-      throw error;
-    }
-  }
-);
-
-export const getUser = createAsyncThunk(
-  "users/profile",
-  async (userId: string, { rejectWithValue }) => {
-    try {
-      const response = await axiosInstance.get(`/users/${userId}`);
-      return response.data;
     } catch (error) {
       if (error instanceof AxiosError && error.response) {
         const errorResponse = error.response.data;
@@ -189,25 +174,6 @@ const authSlice = createSlice({
             (action.payload as ErrorResponse).message || "Logout failed";
         } else {
           state.error = action.error.message || "Logout failed";
-        }
-      })
-
-      .addCase(getUser.pending, (state) => {
-        state.status = "loading";
-        state.error = null;
-      })
-      .addCase(getUser.fulfilled, (state, action) => {
-        state.status = "idle";
-        state.userProfileData = action.payload;
-      })
-      .addCase(getUser.rejected, (state, action) => {
-        state.status = "failed";
-        if (action.payload) {
-          state.error =
-            (action.payload as ErrorResponse).message ||
-            "Get user profile data failed";
-        } else {
-          state.error = action.error.message || "Get user profile data failed";
         }
       });
   }
