@@ -25,12 +25,13 @@ export default function NotesTable({
   const noteStatus = useAppSelector((state) => state.notes.status);
 
   const columns: GridColDef[] = [
-    { field: "title", headerName: "Title", width: 130 },
-    { field: "content", headerName: "Content", width: 130 },
+    { field: "title", headerName: "Title", width: 200 },
+    { field: "content", headerName: "Content", width: 500 },
     {
       field: "actions",
       headerName: "Actions",
       sortable: false,
+      width: 200,
       renderCell: (params) => {
         return (
           <>

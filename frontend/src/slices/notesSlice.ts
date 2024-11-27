@@ -199,8 +199,7 @@ export const noteSlice = createSlice({
               state.notes[index] = response.note?.id ? response?.note: state.notes[index];
           }
 
-          state.status = response.success ? "idle": "failed";
-          state.error = "The note has been modified by another process at the same time. Please try again.";
+          state.status = "idle";
         }
       )
       .addCase(updateNote.rejected, (state, action) => {
