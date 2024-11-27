@@ -13,16 +13,11 @@ export default function Notes() {
   };
 
   const handleOpenUpdateNotePopup = (id: string) => {
-    dispatch(
-      openModal({ modalName: "updateNote", modalProps: { noteId: id } })
-    );
+    dispatch(openModal({ modalName: "updateNote", modalProps: { id: id } }));
   };
 
   const handleOpenDeleteNotePopup = (id: string) => {
-    console.log("id", id);
-    dispatch(
-      openModal({ modalName: "updateNote", modalProps: { noteId: id } })
-    );
+    dispatch(openModal({ modalName: "updateNote", modalProps: { id: id } }));
   };
 
   return (

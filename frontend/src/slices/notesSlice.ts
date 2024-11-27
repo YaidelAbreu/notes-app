@@ -13,6 +13,16 @@ export type Note = NewNote & {
   version: number;
 };
 
+export type EditNote = NewNote & {
+  version: number;
+};
+
+export type NoteUpdateResponse = {
+  success: Boolean;
+  message: string;
+  note?: Note;
+};
+
 interface NoteState {
   notes: Note[];
   selectedNote: Note | undefined;
@@ -85,6 +95,32 @@ export const createNote = createAsyncThunk(
   }
 );
 
+export const updateNote = createAsyncThunk(
+  "projects/updateOne",
+  async (note: Note, { rejectWithValue }) => {
+    try {
+      const updateProjectPayload: EditNote = {
+        title: note.title,
+        content: note.content,
+        version: note.version
+      };
+      const response = await axiosInstance.put(
+        `/notes/${note.id}`,
+        updateProjectPayload
+      );
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError && error.response) {
+        const errorResponse = error.response.data;
+
+        return rejectWithValue(errorResponse);
+      }
+
+      throw error;
+    }
+  }
+);
+
 export const noteSlice = createSlice({
   name: "Notes",
   initialState,
@@ -127,6 +163,31 @@ export const noteSlice = createSlice({
       .addCase(createNote.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message || "Failed to add note.";
+      })
+      .addCase(updateNote.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(
+        updateNote.fulfilled,
+        (state, action: PayloadAction<NoteUpdateResponse>) => {         
+          const response = action.payload;
+
+          const index = state.notes.findIndex(
+            (note) => note.id === response.note?.id
+          );
+
+          if (index !== -1) {
+              state.notes[index] = response.note?.id ? response?.note: state.notes[index];
+          }
+
+          state.status = response.success ? "idle": "failed";
+          state.error = "The note has been modified by another process at the same time. Please try again.";
+        }
+      )
+      .addCase(updateNote.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message || "Failed to update note.";
       });
   }
 });
