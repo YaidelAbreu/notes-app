@@ -3,12 +3,14 @@ import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./slices/authSlice";
 import userReducer from "./slices/userSlice";
 import notificationReducer from "./slices/notificationSlice";
+import notesSlice from "./slices/notesSlice";
 
 const store = configureStore({
   reducer: {
     auth: authReducer,
     user: userReducer,
-    notification: notificationReducer
+    notification: notificationReducer,
+    notes: notesSlice
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(axiosMiddleware)
