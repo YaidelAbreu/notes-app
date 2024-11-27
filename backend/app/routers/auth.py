@@ -4,9 +4,12 @@ from app.core.dependencies import get_db
 from app.schemas.user import UserCreate, UserResponse, UserCredentials
 from app.services.user_service import create_user, authenticate_user
 from app.core.jwt import create_token_pair, add_refresh_token_cookie
+from app.schemas.auth import LogoutResponse
+from fastapi.security import OAuth2PasswordBearer
 
 router = APIRouter()
 
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 @router.post("/register", response_model=UserResponse)
 async def register(user: UserCreate, db: AsyncSession = Depends(get_db)):
@@ -32,3 +35,9 @@ async def login(user: UserCredentials,
     token_pair = create_token_pair(user=authenticated_user)
     add_refresh_token_cookie(response=response, token=token_pair.refresh.token)
     return {"access_token": token_pair, "token_type": "bearer"}
+
+
+@router.post("/logout", response_model=LogoutResponse)
+async def logout(token: str = Depends(oauth2_scheme)):
+    # TODO Invalidate the current token
+    return {"message": "Logout exitoso. Token invalidado."}

@@ -11,3 +11,7 @@ class JwtTokenSchema(BaseModel):
 class TokenPair(BaseModel):
     access: JwtTokenSchema
     refresh: JwtTokenSchema
+
+
+class LogoutResponse(BaseModel):
+    message: str
