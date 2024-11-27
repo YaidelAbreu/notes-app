@@ -45,6 +45,24 @@ export const getNotes = createAsyncThunk(
   }
 );
 
+export const getNote = createAsyncThunk(
+  "notes/getOne",
+  async (id: string, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get(`/notes/${id}`);
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError && error.response) {
+        const errorResponse = error.response.data;
+
+        return rejectWithValue(errorResponse);
+      }
+
+      throw error;
+    }
+  }
+);
+
 export const noteSlice = createSlice({
   name: "Notes",
   initialState,
@@ -61,6 +79,17 @@ export const noteSlice = createSlice({
       .addCase(getNotes.rejected, (state) => {
         state.status = "failed";
         state.notes = [];
+      })
+      .addCase(getNote.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(getNote.fulfilled, (state, action: PayloadAction<Note>) => {
+        state.status = "idle";
+        state.selectedNote = action.payload;
+      })
+      .addCase(getNote.rejected, (state) => {
+        state.status = "failed";
+        state.selectedNote = undefined;
       });
   }
 });
