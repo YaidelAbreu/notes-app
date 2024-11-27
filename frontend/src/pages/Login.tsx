@@ -13,6 +13,10 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAppDispatch } from "../hooks/redux-hooks";
 import { login } from "../slices/authSlice";
+import {
+  showNotification,
+  NotificationType
+} from "../slices/notificationSlice";
 
 const Login = () => {
   const dispatch = useAppDispatch();
@@ -33,6 +37,12 @@ const Login = () => {
         console.error(e);
       }
     } else {
+      dispatch(
+        showNotification({
+          message: "Please provide email and password",
+          type: NotificationType.Error
+        })
+      );
     }
   };
 
