@@ -17,9 +17,11 @@ import {
   showNotification,
   NotificationType
 } from "../slices/notificationSlice";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const [full_name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -27,13 +29,17 @@ const Register = () => {
 
   const handleRegister = async () => {
     if (full_name && email && password) {
-      dispatch(
+      const result = await dispatch(
         register({
           full_name,
           email,
           password
         })
       );
+
+      if (register.fulfilled.match(result)) {
+        navigate("/login");
+      }
     } else {
       dispatch(
         showNotification({

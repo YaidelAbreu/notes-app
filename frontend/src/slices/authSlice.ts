@@ -73,8 +73,6 @@ export const register = createAsyncThunk(
       const response = await axiosInstance.post("/auth/register", data);
       const resData = response.data;
 
-      localStorage.setItem("userInfo", JSON.stringify(resData));
-
       return resData;
     } catch (error) {
       if (error instanceof AxiosError && error.response) {
@@ -146,7 +144,6 @@ const authSlice = createSlice({
         register.fulfilled,
         (state, action: PayloadAction<UserBasicInfo>) => {
           state.status = "idle";
-          state.basicUserInfo = action.payload;
         }
       )
       .addCase(register.rejected, (state, action) => {
