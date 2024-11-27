@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 import { useAppSelector } from "../hooks/redux-hooks";
 import { Navigate } from "react-router-dom";
+import NavBar from "../components/nav/NavBar";
 
 const ProtectedLayout = () => {
   const basicUserInfo = useAppSelector((state) => state.auth.basicUserInfo);
@@ -11,6 +12,7 @@ const ProtectedLayout = () => {
 
   return (
     <>
+      <NavBar />
       <Outlet />
     </>
   );

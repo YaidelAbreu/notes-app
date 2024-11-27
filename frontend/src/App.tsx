@@ -6,6 +6,7 @@ import Register from "./pages/Register";
 import DefaultLayout from "./layouts/DefaultLayout";
 import ProtectedLayout from "./layouts/ProtectedLayout";
 import NotificationBar from "./components/notification/NotificationBar";
+import Notes from "./pages/Notes";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         </Route>
         <Route element={<ProtectedLayout />}>
           <Route path="/" element={<Home />} />
+          <Route path="/notes" element={<Notes />} />
         </Route>
       </Routes>
     </>
