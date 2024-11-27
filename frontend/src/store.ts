@@ -4,13 +4,15 @@ import authReducer from "./slices/authSlice";
 import userReducer from "./slices/userSlice";
 import notificationReducer from "./slices/notificationSlice";
 import notesSlice from "./slices/notesSlice";
+import modalReducer from "./slices/modalSlice";
 
 const store = configureStore({
   reducer: {
     auth: authReducer,
     user: userReducer,
     notification: notificationReducer,
-    notes: notesSlice
+    notes: notesSlice,
+    modal: modalReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(axiosMiddleware)
