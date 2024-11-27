@@ -6,7 +6,8 @@ from app.services.note_service import (
     get_notes_for_user,
     create_note,
     update_note,
-    get_note
+    get_note,
+    delete_note
 )
 from app.core.jwt import get_current_user
 from app.schemas.note import (
@@ -68,6 +69,17 @@ async def edit_note(
 async def get_note_by_id(id: UUID, db: AsyncSession = Depends(get_db)):
 
     note = await get_note(db=db, id=id)
+
+    if note is None:
+        raise HTTPException(status_code=404,
+                            detail=f"Note with ID {id} not found.")
+    return note
+
+
+@router.delete("/{id}", response_model=NoteResponse)
+async def delete_note_by_id(id: UUID, db: AsyncSession = Depends(get_db)):
+
+    note = await delete_note(db=db, id=id)
 
     if note is None:
         raise HTTPException(status_code=404,

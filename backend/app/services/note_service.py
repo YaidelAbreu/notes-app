@@ -8,8 +8,7 @@ from app.db.models.user import User
 from app.schemas.note import (
     NoteCreate,
     NoteUpdate,
-    NoteUpdateResponse,
-    NoteResponse
+    NoteUpdateResponse
 )
 from sqlalchemy.exc import SQLAlchemyError
 from fastapi import HTTPException, status
@@ -120,3 +119,19 @@ async def get_note(
     )
     result = await db.execute(query)
     return result.scalars().first()
+
+
+async def delete_note(
+    db: AsyncSession, id: UUID
+) -> Note | None:
+    note = await get_note(db, id)
+
+    if not note:
+        return {"success": False,
+                "message": f"Note with id {id} not found"}
+
+    note.is_active = False
+    db.add(note)
+    await db.commit()
+    await db.refresh(note)
+    return note
