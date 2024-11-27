@@ -23,7 +23,6 @@ const FormModal = ({
   const handleSubmit = () => {
     onSubmit();
     dispatch(closeModal());
-    // handleClose();
   };
 
   const handleClose = () => {

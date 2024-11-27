@@ -17,7 +17,10 @@ export const axiosMiddleware: Middleware =
           message: errorMessage
         })
       );
-    } else if (action.type.endsWith("/fulfilled")) {
+    } else if (
+      action.type.endsWith("/fulfilled") &&
+      !action.type.endsWith("getOne/fulfilled")
+    ) {
       const successMessage = action.payload?.message || "Sucess!";
 
       dispatch(
