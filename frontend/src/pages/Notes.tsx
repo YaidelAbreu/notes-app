@@ -12,7 +12,14 @@ export default function Notes() {
     dispatch(openModal({ modalName: "addNote", modalProps: {} }));
   };
 
-  const handleOpenUpdateNotePopup = (id: number) => {
+  const handleOpenUpdateNotePopup = (id: string) => {
+    dispatch(
+      openModal({ modalName: "updateNote", modalProps: { noteId: id } })
+    );
+  };
+
+  const handleOpenDeleteNotePopup = (id: string) => {
+    console.log("id", id);
     dispatch(
       openModal({ modalName: "updateNote", modalProps: { noteId: id } })
     );
@@ -34,7 +41,10 @@ export default function Notes() {
         </Grid>
       </Grid>
 
-      <NotesTable onClickEdit={handleOpenUpdateNotePopup} />
+      <NotesTable
+        onClickEdit={handleOpenUpdateNotePopup}
+        onClickDelete={handleOpenDeleteNotePopup}
+      />
     </>
   );
 }

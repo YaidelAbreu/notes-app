@@ -7,12 +7,17 @@ import { useEffect } from "react";
 import { IconButton } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import WysiwygIcon from "@mui/icons-material/Wysiwyg";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 interface NotesTableProps {
-  onClickEdit: (id: number) => void;
+  onClickEdit: (id: string) => void;
+  onClickDelete: (id: string) => void;
 }
 
-export default function NotesTable({ onClickEdit }: NotesTableProps) {
+export default function NotesTable({
+  onClickEdit,
+  onClickDelete
+}: NotesTableProps) {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
@@ -44,6 +49,13 @@ export default function NotesTable({ onClickEdit }: NotesTableProps) {
               onClick={() => onClickEdit(params.row.id)}
             >
               <EditIcon />
+            </IconButton>
+            <IconButton
+              color="warning"
+              aria-label="delete-note"
+              onClick={() => onClickDelete(params.row.id)}
+            >
+              <DeleteIcon />
             </IconButton>
           </>
         );
