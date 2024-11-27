@@ -27,17 +27,13 @@ const Register = () => {
 
   const handleRegister = async () => {
     if (full_name && email && password) {
-      try {
-        await dispatch(
-          register({
-            full_name,
-            email,
-            password
-          })
-        ).unwrap();
-      } catch (e) {
-        console.error(e);
-      }
+      dispatch(
+        register({
+          full_name,
+          email,
+          password
+        })
+      );
     } else {
       dispatch(
         showNotification({

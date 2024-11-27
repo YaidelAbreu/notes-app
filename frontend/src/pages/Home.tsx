@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { Button } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../hooks/redux-hooks";
 import { getUser, logout } from "../slices/authSlice";
 import { useNavigate } from "react-router-dom";
@@ -9,7 +8,6 @@ const Home = () => {
   const navigate = useNavigate();
 
   const basicUserInfo = useAppSelector((state) => state.auth.basicUserInfo);
-  const userProfileInfo = useAppSelector((state) => state.auth.userProfileData);
 
   useEffect(() => {
     if (basicUserInfo) {
@@ -18,12 +16,8 @@ const Home = () => {
   }, [basicUserInfo, dispatch]);
 
   const handleLogout = async () => {
-    try {
-      await dispatch(logout()).unwrap();
-      navigate("/login");
-    } catch (e) {
-      console.error(e);
-    }
+    await dispatch(logout());
+    navigate("/login");
   };
 
   return (

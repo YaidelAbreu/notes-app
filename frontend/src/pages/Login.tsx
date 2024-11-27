@@ -26,21 +26,17 @@ const Login = () => {
 
   const handleLogin = async () => {
     if (email && password) {
-      try {
-        await dispatch(
-          login({
-            email,
-            password
-          })
-        ).unwrap();
-      } catch (e) {
-        console.error(e);
-      }
+      dispatch(
+        login({
+          email,
+          password
+        })
+      );
     } else {
       dispatch(
         showNotification({
           message: "Please provide email and password",
-          type: NotificationType.Error
+          type: NotificationType.Error,
         })
       );
     }
