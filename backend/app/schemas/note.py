@@ -1,7 +1,6 @@
-from datetime import datetime
+from typing import Any, Optional
 from pydantic import BaseModel
 from uuid import UUID
-from typing import Optional
 
 
 class NoteResponse(BaseModel):
@@ -17,6 +16,12 @@ class NoteCreate(BaseModel):
 
 
 class NoteUpdate(BaseModel):
-    title: Optional[str]
-    content: Optional[str]
-    updated_on: datetime
+    title: str
+    content: str
+    version: int
+
+
+class NoteUpdateResponse(BaseModel):
+    success: bool
+    message: str
+    note: Optional[Any] = None

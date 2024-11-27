@@ -1,9 +1,19 @@
+from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException, status
 from app.db.models.user import User
 from app.core.dependencies import get_db
-from app.services.note_service import get_notes_for_user, create_note
+from app.services.note_service import (
+    get_notes_for_user,
+    create_note,
+    update_note,
+)
 from app.core.jwt import get_current_user
-from app.schemas.note import NoteResponse, NoteCreate
+from app.schemas.note import (
+    NoteResponse,
+    NoteCreate,
+    NoteUpdate,
+    NoteUpdateResponse
+) 
 from sqlalchemy.ext.asyncio import AsyncSession
 
 router = APIRouter()
@@ -28,3 +38,26 @@ async def add_note(
     current_user: User = Depends(get_current_user)
 ):
     return await create_note(db, note, current_user)
+
+
+@router.put("/{id}", response_model=NoteUpdateResponse)
+async def edit_note(
+    id: UUID,
+    note_data: NoteUpdate,
+    db: AsyncSession = Depends(get_db),
+):
+    try:
+        updated_note = await update_note(db=db,
+                                         id=id,
+                                         note_data=note_data)
+        return updated_note
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail=str(e)
+        )
+    except Exception as e:
+        print("errorMSDSD", e)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Internal server error"
+        )
