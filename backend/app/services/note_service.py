@@ -5,7 +5,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from app.db.models.note import Note
 from app.db.models.user import User
-from app.schemas.note import NoteCreate, NoteUpdate, NoteUpdateResponse
+from app.schemas.note import (
+    NoteCreate,
+    NoteUpdate,
+    NoteUpdateResponse,
+    NoteResponse
+)
 from sqlalchemy.exc import SQLAlchemyError
 from fastapi import HTTPException, status
 
@@ -59,16 +64,7 @@ async def update_note(
     db: AsyncSession, id: UUID, note_data: NoteUpdate
 ) -> NoteUpdateResponse:
     # Find the latest version of the note.
-    query = select(Note).where(
-            and_(
-                Note.id == id,
-                Note.is_active,
-                Note.date_replaced.is_(None)
-            )
-        )
-
-    result = await db.execute(query)
-    note = result.scalars().first()
+    note = await get_note(db, id)
 
     if not note:
         return {"success": False,
@@ -112,3 +108,15 @@ async def next_version(db: AsyncSession,
     await db.refresh(new_note)
 
     return new_note
+
+
+async def get_note(
+    db: AsyncSession, id: UUID
+) -> Note | None:
+    query = select(Note).where(
+        Note.id == id,
+        Note.is_active,
+        Note.date_replaced.is_(None)
+    )
+    result = await db.execute(query)
+    return result.scalars().first()
